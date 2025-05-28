@@ -32,4 +32,4 @@ if (Sys.info()["sysname"] != "Linux") {
 
 library(Statamarkdown)
 
-utils:sessionInfo()
+utils::sessionInfo()
