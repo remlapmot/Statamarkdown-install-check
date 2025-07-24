@@ -25,7 +25,8 @@ if (Sys.info()["sysname"] != "Linux") {
   pak::pkg_install(c("Statamarkdown"), dependencies = TRUE)
 } else if (Sys.info()["machine"] == "aarch64") {
   # Linux aarch64
-  pak::repo_add(CRAN = "https://cloud.r-project.org")
+  pak::repo_add(CRAN = "https://cran.r-universe.dev/bin/linux/noble-aarch64/4.5")
+  pak::repo_add(CRANbackup = "https://cloud.r-project.org")
   # pak::repo_add(universe = "https://mrcieu.r-universe.dev")
   pak::pkg_install(c("Statamarkdown"), dependencies = TRUE)
 }
