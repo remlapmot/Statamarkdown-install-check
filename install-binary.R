@@ -28,7 +28,7 @@ if (Sys.info()["sysname"] != "Linux") {
   pak::repo_add(CRAN = "https://cran.r-universe.dev/bin/linux/noble-aarch64/4.5")
   pak::repo_add(CRANbackup = "https://cloud.r-project.org")
   # pak::repo_add(universe = "https://mrcieu.r-universe.dev")
-  pak::pkg_install(c("Statamarkdown"), dependencies = TRUE)
+  pak::pkg_install("Hemken/Statamarkdown", dependencies = TRUE)
 }
 
 library(Statamarkdown)
