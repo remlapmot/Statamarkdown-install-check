@@ -63,5 +63,5 @@ jobs:
           $buildargs = "build", "Statamarkdown"
           & $rcmd $buildargs
 
-          $checkargs = "check", "--as-cran", "Statamarkdown_0.9.2.tar.gz"
+          $checkargs = "check", "--as-cran", "Statamarkdown_0.9.4.tar.gz"
           & $rcmd $checkargs
