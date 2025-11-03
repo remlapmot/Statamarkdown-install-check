@@ -14,12 +14,6 @@ if (Sys.info()["sysname"] != "Linux") {
   # pak::repo_add(universe = "https://mrcieu.r-universe.dev")
   pak::pkg_install(c("Statamarkdown"), dependencies = TRUE)
 } else if (Sys.info()["machine"] == "x86_64") {
-  # Linux x86_64
-  if (getRversion() >= '4.5.1') {
-    # pak::repo_add(universe = "https://mrcieu.r-universe.dev/bin/linux/noble/4.5/")
-  } else if (getRversion() < '4.5.1') {
-    # pak::repo_add(universe = "https://mrcieu.r-universe.dev/")
-  }
   pak::repo_add(CRAN = "https://p3m.dev/cran/__linux__/noble/latest")
   pak::repo_add(CRANbackup = "https://cloud.r-project.org")
   pak::pkg_install(c("Statamarkdown"), dependencies = TRUE)
