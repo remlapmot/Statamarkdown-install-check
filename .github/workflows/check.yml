@@ -36,7 +36,7 @@ jobs:
           - {os: ubuntu-latest,   r: 'oldrel-4'}
           - {os: ubuntu-latest,   r: 'oldrel-5'}
           - {os: ubuntu-latest,   r: 'oldrel-6'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
+          # - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: macos-15, r: 'release'}
           - {os: macos-14, r: 'release'}
           - {os: ubuntu-24.04-arm, r: 'release', rspm: 'no' }
