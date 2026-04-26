@@ -63,6 +63,6 @@ jobs:
           $buildargs = "build", "Statamarkdown"
           & $rcmd $buildargs
 
-          $tarball = Get-ChildItem -Filter "TwoSampleMR_*.tar.gz" | Select-Object -First 1 -ExpandProperty Name
+          $tarball = Get-ChildItem -Filter "Statamarkdown_*.tar.gz" | Select-Object -First 1 -ExpandProperty Name
           $checkargs = "check", "--as-cran", $tarball
           & $rcmd $checkargs
