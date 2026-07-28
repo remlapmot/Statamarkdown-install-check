@@ -40,8 +40,24 @@ jobs:
           Start-Process -FilePath rtools45-aarch64.exe -ArgumentList "/install /norestart /verysilent /SUPPRESSMSGBOXES" -NoNewWindow -Wait
           "C:\rtools45-aarch64\usr\bin" >> $env:GITHUB_PATH
 
-      - name: Install pandoc
-        run: choco install pandoc --no-progress
+      # There is no Windows on Arm build of pandoc either, so install the
+      # x86_64 zip rather than using choco, whose PATH changes do not reach
+      # subsequent steps
+      - name: Install pandoc (x86_64)
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $headers = @{ Authorization = "Bearer $env:GITHUB_PAT" }
+          $tag = (Invoke-RestMethod -Uri "https://api.github.com/repos/jgm/pandoc/releases/latest" -Headers $headers).tag_name
+          $version = $tag.TrimStart('v')
+          $url = "https://github.com/jgm/pandoc/releases/download/$tag/pandoc-$version-windows-x86_64.zip"
+          curl.exe -L -o pandoc-win.zip "$url"
+          New-Item -ItemType Directory -Force -Path C:\pandoc | Out-Null
+          & "$env:SystemRoot\System32\tar.exe" -xf pandoc-win.zip -C C:\pandoc
+          if ($LASTEXITCODE -ne 0) { throw "Failed to extract pandoc-win.zip" }
+          $bin = (Get-ChildItem -Path C:\pandoc -Filter pandoc.exe -Recurse | Select-Object -First 1).DirectoryName
+          if (-not $bin) { throw "pandoc.exe not found under C:\pandoc" }
+          & "$bin\pandoc.exe" --version
+          $bin >> $env:GITHUB_PATH
 
       # There is no Windows on Arm build of Quarto, so install the x86_64
       # zip and run it under the x64 emulation layer
