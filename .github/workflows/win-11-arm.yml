@@ -43,6 +43,22 @@ jobs:
       - name: Install pandoc
         run: choco install pandoc --no-progress
 
+      # There is no Windows on Arm build of Quarto, so install the x86_64
+      # zip and run it under the x64 emulation layer
+      - name: Install Quarto (x86_64)
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $headers = @{ Authorization = "Bearer $env:GITHUB_PAT" }
+          $tag = (Invoke-RestMethod -Uri "https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest" -Headers $headers).tag_name
+          $version = $tag.TrimStart('v')
+          $url = "https://github.com/quarto-dev/quarto-cli/releases/download/$tag/quarto-$version-win.zip"
+          curl.exe -L -o quarto-win.zip "$url"
+          New-Item -ItemType Directory -Force -Path C:\quarto | Out-Null
+          tar.exe -xf quarto-win.zip -C C:\quarto
+          $bin = (Get-ChildItem -Path C:\quarto -Filter quarto.exe -Recurse | Select-Object -First 1).DirectoryName
+          & "$bin\quarto.exe" --version
+          $bin >> $env:GITHUB_PATH
+
       - name: Install Statamarkdown and report session info
         run: |
           $ErrorActionPreference = 'Stop'
