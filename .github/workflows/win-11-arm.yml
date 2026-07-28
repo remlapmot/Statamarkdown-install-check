@@ -80,6 +80,15 @@ jobs:
           git clone --depth 1 https://github.com/Hemken/Statamarkdown.git
           Rscript -e "remove.packages('Statamarkdown')"
 
+      # The released version only suggests rmarkdown, so installing it above
+      # does not pull in the development version's dependencies - notably the
+      # quarto package, which is its vignette builder. R CMD check --as-cran
+      # also errors on any missing Suggests, so install them from the clone.
+      - name: Install development version dependencies
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Rscript -e "install.packages('remotes', repos = 'https://cloud.r-project.org/'); remotes::install_deps('Statamarkdown', dependencies = TRUE, repos = 'https://cloud.r-project.org/')"
+
       - name: Check makeindex
         run: |
           $makeindex = Get-Command makeindex -ErrorAction SilentlyContinue
