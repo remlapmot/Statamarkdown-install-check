@@ -54,8 +54,12 @@ jobs:
           $url = "https://github.com/quarto-dev/quarto-cli/releases/download/$tag/quarto-$version-win.zip"
           curl.exe -L -o quarto-win.zip "$url"
           New-Item -ItemType Directory -Force -Path C:\quarto | Out-Null
-          tar.exe -xf quarto-win.zip -C C:\quarto
+          # Use Windows' bsdtar by full path: Rtools is on PATH by this point
+          # and its GNU tar cannot extract zip archives
+          & "$env:SystemRoot\System32\tar.exe" -xf quarto-win.zip -C C:\quarto
+          if ($LASTEXITCODE -ne 0) { throw "Failed to extract quarto-win.zip" }
           $bin = (Get-ChildItem -Path C:\quarto -Filter quarto.exe -Recurse | Select-Object -First 1).DirectoryName
+          if (-not $bin) { throw "quarto.exe not found under C:\quarto" }
           & "$bin\quarto.exe" --version
           $bin >> $env:GITHUB_PATH
 
